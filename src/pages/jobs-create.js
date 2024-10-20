@@ -64,15 +64,16 @@ const CreateJobs = ()=>{
                     'Content-Type': 'multipart/form-data',
                 },
               });
-              
+              console.log('company exist1..');
               if (response.data.exists) {
-                console.log('company exist..');
+                console.log('company exist2..');
               } else {
+                console.log('company exist3..');
                 navigate('/organization/profile/create/'); 
               }
             } catch (err) {
               setError('Error fetching company profile.');
-              setProfileExists(false);
+              
             } 
           };
       
