@@ -44,7 +44,7 @@ const CreateJobs = ()=>{
 
         const fetchCountry = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/countries/', {
+                const response = await axios.get(`${apiUrl}/api/countries/`, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -60,7 +60,7 @@ const CreateJobs = ()=>{
         const fetchCities = async () => {
             if (country) {
                 try {
-                    const response = await axios.get(`http://127.0.0.1:8000/api/cities/?country=${country}`, {
+                    const response = await axios.get(`${apiUrl}/api/cities/?country=${country}`, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                            
@@ -104,7 +104,7 @@ const CreateJobs = ()=>{
             formData.append('job_type',job_type);
             formData.append('company_industry',company_industry);
            
-            const response = await axios.post(`http://127.0.0.1:8000/jobs/create/`, formData, {
+            const response = await axios.post(`${apiUrl}/jobs/create/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${user?.auth_token}`, // Include the user ID in the Authorization header
