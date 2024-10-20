@@ -117,7 +117,7 @@ const CreateOrganizationProfile = ()=>{
         // Fetch categories and default subcategories
         const fetchCountry = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/api/countries/', {
+                const response = await axios.get(`${apiUrl}/api/countries/`, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -133,7 +133,7 @@ const CreateOrganizationProfile = ()=>{
         const fetchCities = async () => {
             if (country) {
                 try {
-                    const response = await axios.get(`http://127.0.0.1:8000/api/cities/?country=${country}`, {
+                    const response = await axios.get(`${apiUrl}/api/cities/?country=${country}`, {
                         headers: {
                             'Content-Type': 'multipart/form-data',
                            
