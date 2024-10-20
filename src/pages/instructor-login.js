@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setLoading } from '../actions/user-action'; // Import setUser and setLoading actions
+import apiUrl from '../components/api-url';
 
 
 
@@ -35,7 +36,7 @@ const InstuctorLogin = ()=>{
         try {
             dispatch(setLoading(true));
            
-            const response = await axios.post('http://127.0.0.1:8000/Instuctor-login/', {
+            const response = await axios.post(`${apiUrl}/Instuctor-login/`, {
             email,
             password,
             });

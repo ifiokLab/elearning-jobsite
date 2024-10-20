@@ -8,6 +8,7 @@ import '../styles/signup.css';
 
 import { useDispatch} from 'react-redux';
 import { setUser, setLoading } from '../actions/user-action'; // Import setUser and setLoading actions
+import apiUrl from '../components/api-url';
 
 
 
@@ -49,7 +50,7 @@ const InstructorSignup = ()=>{
         try {
             dispatch(setLoading(true));
            
-            const response = await axios.post('http://127.0.0.1:8000/instructor-signup/', {
+            const response = await axios.post(`${apiUrl}/instructor-signup/`, {
             first_name: fname,
             last_name: lname,
             email,
