@@ -75,7 +75,7 @@ const JobHeader = ()=>{
                 </Link>
                 ):(
                     <Link to='/login/' className='login-link'>
-                        Login
+                        Login{user.first_name}
                     </Link>
                 )}
                 <Link to = '/organization/jobs/create/' className='job-link'>
