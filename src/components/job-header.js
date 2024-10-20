@@ -39,7 +39,7 @@ const JobHeader = ()=>{
                 <Link to='/jobs/' className='job-link'>
                     Jobs
                 </Link>
-                <Link to='' className='courses-link'>
+                <Link to='/user-courses/' className='courses-link'>
                     Courses
                 </Link>
            </div>
@@ -49,13 +49,13 @@ const JobHeader = ()=>{
                     <i className="fa-solid fa-user"></i>
                     <div className={`profile-container ${profile ? 'show' : ''}`}>
                         <div className='user-email'>
-                            ifiokudoh77@gmail.com
+                            {user.email}
                         </div>
-                        <Link  to = '' className='profile-tabs'>
+                        <Link  to = '/organization/profile/' className='profile-tabs'>
                             <i class="fa-solid fa-address-card"></i>
                             <span>Profile</span>
                         </Link>
-                        <Link  to = '' className='profile-tabs'>
+                        <Link  to = '/user/jobs/' className='profile-tabs'>
                              <i class="fa-solid fa-bookmark"></i>
                             <span>My Jobs</span>
                         </Link>
@@ -105,7 +105,7 @@ const JobHeader = ()=>{
                         </Link>  
                     </div>
                     <div className='link-btn'>
-                        <Link to='' >
+                        <Link to='/user-courses/' >
                             <div className='text'>Courses</div>
                             <div className='icon'>
                                 <i class="fa-solid fa-chevron-right"></i>
