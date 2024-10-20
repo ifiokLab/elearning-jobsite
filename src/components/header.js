@@ -558,7 +558,7 @@ const Header = ()=>{
                             Your cart is empty
                             </div>
                             <div className='link-wrapper'>
-                                <Link to=''>Keep shopping</Link>
+                                <Link to='/jobs/'>Jobs</Link>
                             </div>
                         </div>
                     </div>
