@@ -61,10 +61,11 @@ const CreateJobs = ()=>{
             try {
               const response = await axios.get(`${apiUrl}/api/company-profile/check/`, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Token ${user?.auth_token}`,
                 },
               });
               console.log('company exist1....');
+              console.log(response.data);
               if (response.data.exists) {
                 console.log('company exist2..');
               } else {
