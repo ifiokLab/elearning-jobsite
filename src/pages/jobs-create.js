@@ -59,7 +59,7 @@ const CreateJobs = ()=>{
         };
         const checkCompanyProfile = async () => {
             try {
-              const response = await axios.get('/api/company-profile/check/', {
+              const response = await axios.get(`${apiUrl}/api/company-profile/check/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
