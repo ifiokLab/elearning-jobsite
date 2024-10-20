@@ -58,10 +58,11 @@ const CreateJobs = ()=>{
             }
         };
         const checkCompanyProfile = async () => {
+            console.log('company exist1....',user.auth_token);
             try {
               const response = await axios.get(`${apiUrl}/api/company-profile/check/`, {
                 headers: {
-                    Authorization: `Token ${user.user.auth_token}`,
+                    Authorization: `Token ${user?.auth_token}`,
                 },
               });
               console.log('company exist1....',user.user.auth_token);
