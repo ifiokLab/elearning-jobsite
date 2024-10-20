@@ -57,6 +57,25 @@ const CreateJobs = ()=>{
                 
             }
         };
+        const checkCompanyProfile = async () => {
+            try {
+              const response = await axios.get('/api/company-profile/check/', {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+              });
+              
+              if (response.data.exists) {
+                console.log('company exist..');
+              } else {
+                navigate('/organization/profile/create/'); 
+              }
+            } catch (err) {
+              setError('Error fetching company profile.');
+              setProfileExists(false);
+            } 
+          };
+      
         const fetchCities = async () => {
             if (country) {
                 try {
@@ -81,6 +100,7 @@ const CreateJobs = ()=>{
 
         fetchCountry();
         fetchCities();
+        checkCompanyProfile();
     }, [country]);
 
     const toggleSidebar = ()=>{
