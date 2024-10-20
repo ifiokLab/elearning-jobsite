@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 
 const JobHeader = ()=>{
     const dispatch = useDispatch();
-    const user = useSelector((state) => state.user);
+    const user = useSelector((state) => state.user.user);
     const [sidebarOpen,setsidebarOpen] = useState(false);
     const [profile,setprofile] = useState(false);
 
