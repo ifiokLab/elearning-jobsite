@@ -64,7 +64,7 @@ const CreateJobs = ()=>{
                     'Content-Type': 'multipart/form-data',
                 },
               });
-              console.log('company exist1..');
+              console.log('company exist1....');
               if (response.data.exists) {
                 console.log('company exist2..');
               } else {
