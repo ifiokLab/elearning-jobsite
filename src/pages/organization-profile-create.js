@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import apiUrl from '../components/api-url';
 
 
 const CreateOrganizationProfile = ()=>{
@@ -48,7 +49,7 @@ const CreateOrganizationProfile = ()=>{
             // Check if thumbnail is a file (not a base64 string)
            
     
-            const response = await axios.post('http://127.0.0.1:8000/organization/profile/create/', formData, {
+            const response = await axios.post(`${apiUrl}/organization/profile/create/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${User.auth_token}`, // Include the user ID in the Authorization header
