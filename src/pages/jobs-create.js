@@ -74,7 +74,8 @@ const CreateJobs = ()=>{
                 navigate('/organization/profile/create/'); 
               }
             } catch (err) {
-              console.log('Error fetching company profile.');
+                navigate('/organization/profile/create/'); 
+                console.log('Error fetching company profile.');
               
             } 
           };
