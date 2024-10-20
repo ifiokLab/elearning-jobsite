@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { setUser } from '../actions/user-action'; // Import actions
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import apiUrl from './api-url';
 
 const Header = ()=>{
     const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const Header = ()=>{
     const handleLogout = async () => {
         try {
           // Make a POST request to the logout endpoint
-          const response = await axios.post('http://127.0.0.1:8000/logout/');
+          const response = await axios.post(`${apiUrl}/logout/`);
     
           if (response.data.success) {
             // Clear the user data in Redux store

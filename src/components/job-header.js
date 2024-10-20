@@ -36,7 +36,7 @@ const JobHeader = ()=>{
                 <Link to='' className='logo'>
                     Logo
                 </Link>
-                <Link to='' className='job-link'>
+                <Link to='/jobs/' className='job-link'>
                     Jobs
                 </Link>
                 <Link to='' className='courses-link'>
