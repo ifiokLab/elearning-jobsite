@@ -69,10 +69,16 @@ const JobHeader = ()=>{
                         </Link>
                     </div>
                 </div>
-                <Link to='' className='login-link'>
-                    Login
+                {user.isLoggedIn ? (
+                    <Link to='/logout/' className='login-link'>
+                    Logout
                 </Link>
-                <Link to = '' className='job-link'>
+                ):(
+                    <Link to='/login/' className='login-link'>
+                        Login
+                    </Link>
+                )}
+                <Link to = '/organization/jobs/create/' className='job-link'>
                     Post Job
                 </Link>
            </div>
