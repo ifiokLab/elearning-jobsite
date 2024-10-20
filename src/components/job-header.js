@@ -79,7 +79,7 @@ const JobHeader = ()=>{
                     </Link>
                 )}
                 <Link to = '/organization/jobs/create/' className='job-link'>
-                    Post Jobuu{user.first_name}
+                    Post Job
                 </Link>
            </div>
            
