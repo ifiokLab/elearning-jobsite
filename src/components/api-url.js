@@ -1,4 +1,4 @@
 
-const apiUrl = 'https://elearning-jobsite.onrender.com';
+const apiUrl = 'https://elearning-backend-2iu9.onrender.com';
 
 export default apiUrl;
