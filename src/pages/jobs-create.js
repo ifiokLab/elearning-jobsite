@@ -64,7 +64,7 @@ const CreateJobs = ()=>{
                     Authorization: `Token ${user?.auth_token}`,
                 },
               });
-              console.log('company exist1....');
+              console.log('company exist1....',user.auth_token);
               console.log(response.data);
               if (response.data.exists) {
                 console.log('company exist2..');
