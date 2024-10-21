@@ -37,7 +37,7 @@ const CreateOrganizationProfile = ()=>{
         
         try {
             const formData = new FormData();
-            formData.append('name', name);
+            formData.append('company_name', name);
             formData.append('country', country);
             formData.append('city', city);
             formData.append('website', website);
