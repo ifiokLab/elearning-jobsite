@@ -34,7 +34,7 @@ const Home = ()=>{
         try {
           // Make a POST request to add the course to the cart
           const formData = new FormData();
-          const response = await axios.post(`http://localhost:8000/add-to-cart/${courseId}/`,formData,{
+          const response = await axios.post(`${apiUrl}/add-to-cart/${courseId}/`,formData,{
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Token ${user?.auth_token}`, // Include the user ID in the Authorization header
@@ -55,7 +55,7 @@ const Home = ()=>{
     };
     const fetchCartCourses = async () => {
         try {
-          const response = await axios.get('http://localhost:8000/api/shopping-cart/',{
+          const response = await axios.get(`${apiUrl}/api/shopping-cart/`,{
             headers: {
                 Authorization: `Token ${user?.auth_token}`,
             },
@@ -77,7 +77,7 @@ const Home = ()=>{
         const fetchCourses = async () => {
             //console.log('user.auth_token:',user);
           try {
-            const response = await axios.get('http://localhost:8000/api/courses/',{
+            const response = await axios.get(`${apiUrl}/api/courses/`,{
                 headers: {
                     Authorization: `Token ${user?.auth_token}`,
                 },
