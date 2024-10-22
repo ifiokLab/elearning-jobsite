@@ -38,7 +38,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchRequirements = async ()=>{
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/courses/${id}/add-objectives/`);
+            const response = await axios.get(`${apiUrl}/courses/${id}/add-objectives/`);
             setRequirements(response.data);
             setLoading(!loading);
         } catch (error) {
@@ -48,7 +48,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchObjectives = async ()=>{
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/courses/${id}/add-objectives/`);
+            const response = await axios.get(`${apiUrl}/courses/${id}/add-objectives/`);
             setObjectives(response.data);
             setLoading(!loading);
         } catch (error) {
@@ -58,7 +58,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchContentCounts = async ()=>{
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/course/${id}/content-type-count/`);
+            const response = await axios.get(`${apiUrl}/api/course/${id}/content-type-count/`);
             setContentCount(response.data);
             console.log('contentCount:',response.data);
             setLoading(!loading);
@@ -69,7 +69,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchCourseDetail = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/courses/${id}/`);
+          const response = await axios.get(`${apiUrl}/courses/${id}/`);
           setCourse(response.data);
           setLoading(false);
         } catch (error) {
@@ -80,7 +80,7 @@ const CourseDetailPage = ()=>{
     
     const fetchCourseSections = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/sections/${id}/`);
+            const response = await axios.get(`${apiUrl}/api/sections/${id}/`);
             console.log(response.data);
             setSections(response.data);
             setOpenSections(new Array(response.data).fill(false));
@@ -90,7 +90,7 @@ const CourseDetailPage = ()=>{
     };
     const checkEnrollment = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/check-enrollment/${id}/`,{
+            const response = await axios.get(`${apiUrl}/api/check-enrollment/${id}/`,{
                 headers: {
                     Authorization: `Token ${user?.auth_token}`,
                 },
@@ -111,7 +111,7 @@ const CourseDetailPage = ()=>{
         try {
           // Make a POST request to add the course to the cart
           const formData = new FormData();
-          const response = await axios.post(`http://localhost:8000/add-to-cart/${courseId}/`,formData,{
+          const response = await axios.post(`${apiUrl}/add-to-cart/${courseId}/`,formData,{
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Token ${user?.auth_token}`, // Include the user ID in the Authorization header
@@ -136,7 +136,7 @@ const CourseDetailPage = ()=>{
         try {
           // Make a POST request to add the course to the cart
           const formData = new FormData();
-          const response = await axios.post(`http://localhost:8000/go-to-cart/${courseId}/`,formData,{
+          const response = await axios.post(`${apiUrl}/go-to-cart/${courseId}/`,formData,{
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Token ${user?.auth_token}`, // Include the user ID in the Authorization header
@@ -161,7 +161,7 @@ const CourseDetailPage = ()=>{
         try {
           // Make a POST request to add the course to the cart
           const formData = new FormData();
-          const response = await axios.post(`http://localhost:8000/go-to-cart/${courseId}/`,formData,{
+          const response = await axios.post(`${apiUrl}/go-to-cart/${courseId}/`,formData,{
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': `Token ${user?.auth_token}`, // Include the user ID in the Authorization header
@@ -182,7 +182,7 @@ const CourseDetailPage = ()=>{
     };
     const fetchCartCourses = async () => {
         try {
-          const response = await axios.get('http://localhost:8000/api/shopping-cart/',{
+          const response = await axios.get(`${apiUrl}/api/shopping-cart/`,{
             headers: {
                 Authorization: `Token ${user?.auth_token}`,
             },
