@@ -18,7 +18,7 @@ const UserCourses = ()=>{
         const fetchCourses = async () => {
             console.log('user.auth_token:',user);
           try {
-            const response = await axios.get('http://localhost:8000/enrolled-courses/',{
+            const response = await axios.get(`${apiUrl}/enrolled-courses/`,{
                 headers: {
                     Authorization: `Token ${user?.auth_token}`,
                 },

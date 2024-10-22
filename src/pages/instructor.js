@@ -31,7 +31,7 @@ const Instructor = ()=>{
 
         const fetchUserCourses = async () => {
         try {
-            const response = await axios.get('http://127.0.0.1:8000/instructor-courses/', {
+            const response = await axios.get(`${apiUrl}/instructor-courses/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${User.auth_token}`, // Include the user ID in the Authorization header
