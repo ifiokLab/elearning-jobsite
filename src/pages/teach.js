@@ -21,7 +21,7 @@ const Teach = ()=>{
                     <div className='text'>
                         Become an instructor and change lives — including your own
                     </div>
-                    <Link className='teach-btn'>
+                    <Link to="/create-course/" className='teach-btn'>
                         Get Started
                     </Link>
                 </div>
