@@ -146,7 +146,7 @@ const InterviewQuestions = ()=>{
                 </form>
 
                 <div className="requirements-list">
-                    <h2>Course Requirements</h2>
+                    <h2>Interview Questions</h2>
                     <ul>
                         {questionsList.map((data) => (
                         <li key={data.id}>

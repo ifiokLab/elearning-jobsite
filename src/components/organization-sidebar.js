@@ -33,7 +33,7 @@ const OrganizationSidebar = ({ className,toggleSidebar })=>{
                         <i class="fa-solid fa-xmark"></i>
                     </div>
                 </div>
-                <Link to = "" className = "tabs" >
+                <Link to = "/organization/jobs/create/" className = "tabs" >
                     <div className='icon'>
                         <i class="fa-solid fa-plus"></i>
                     </div>
