@@ -57,6 +57,12 @@ const OrganizationSidebar = ({ className,toggleSidebar })=>{
                     </div>
                     <div className='text'>Courses</div>
                 </Link>
+                <Link to = "/organization/repository/" className = "tabs" >
+                    <div className='icon'>
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <div className='text'>Repository</div>
+                </Link>
             </div>
             <div className='box-b'>
                 <Link to = "" className = "tabs" >

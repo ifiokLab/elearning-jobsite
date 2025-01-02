@@ -19,6 +19,7 @@ const OrganizationDashboard = ()=>{
     const [sidebarOpen,setsidebarOpen] = useState(false);
     const [jobs,setJobs] = useState([]);
     const [loading,setLoading] = useState(false);
+    
     const user = useSelector((state) => state.user.user);
 
     const toggleSidebar = ()=>{
@@ -91,6 +92,7 @@ const OrganizationDashboard = ()=>{
                 
                
             </div>
+           
            
             
         </div>

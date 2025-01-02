@@ -44,6 +44,21 @@ import CreateJobs from './pages/jobs-create';
 import Applicants from './pages/applicants';
 import InterviewQuestions from './pages/interview-questions';
 import CreateOrganizationProfile from './pages/organization-profile-create';
+import Repository from './pages/repository';
+import CreateRepository from './pages/create-repository';
+import EditRepository from './pages/edit-repository';
+import TeamDashboard from './pages/team-dashboard';
+import CreateAnnouncement from './pages/create-announcement';
+import MessageList from './pages/message-list';
+import MessageDetail from './pages/message-detail';
+import TeamFileUpload from './pages/team-file-upload';
+import TeamFileList from './pages/team-file-list';
+import TeamFileEdit from './pages/team-file-edit';
+import AcceptTeamInvite from './pages/accept-team-invite';
+import TeamSignup from './pages/team-signup';
+import TeamTodoList from './pages/team-todo-list';
+import TeamTodoCreate from './pages/team-todo-create';
+import TeamTodoEdit from './pages/team-todo-edit';
 
 function App() {
   return (
@@ -52,6 +67,21 @@ function App() {
       <Route path="/" element={<Home />} />
       <Route path="interview-questions/:Id/create/" element={<InterviewQuestions />} />
       <Route path="organization/applicants/" element={<Applicants />} />
+      <Route path="/team/:Id/todo/:todoId/edit/" element={<TeamTodoEdit />} />
+      <Route path="/team/:Id/todo/create/" element={<TeamTodoCreate />} />
+      <Route path="/team/:Id/todo/list/" element={<TeamTodoList />} />
+      <Route path="team-signup/" element={<TeamSignup />} />
+      <Route path="join-team/:token/" element={<AcceptTeamInvite />} />
+      <Route path="/team/:Id/file/list/" element={<TeamFileList />} />
+      <Route path="/team/:Id/file/create/" element={<TeamFileUpload />} />
+      <Route path="/team/:Id/file/:fileId/edit/" element={<TeamFileEdit />} />
+      <Route path="/repository/team/:Id/:announcementId/message-detail/" element={<MessageDetail />} />
+      <Route path="/repository/team/:Id/message-board/" element={<MessageList />} />
+      <Route path="/team/:Id/announcement/create/" element={<CreateAnnouncement />} />
+      <Route path="/repository/team/:Id/dashboard/" element={<TeamDashboard />} />
+      <Route path="organization/repository/" element={<Repository />} />
+      <Route path="organization/repository/:Id/edit/" element={<EditRepository />} />
+      <Route path="organization/repository/create/" element={<CreateRepository />} />
       <Route path="organization/profile/create/" element={<CreateOrganizationProfile  />} />
       <Route path="organization/profile/" element={<OrganizationProfile  />} />
       <Route path="organization/jobs/create/" element={<CreateJobs  />} />
