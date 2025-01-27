@@ -59,14 +59,37 @@ import TeamSignup from './pages/team-signup';
 import TeamTodoList from './pages/team-todo-list';
 import TeamTodoCreate from './pages/team-todo-create';
 import TeamTodoEdit from './pages/team-todo-edit';
+import TeamChat from  './pages/team-chat';
+import EmployeeRepository from './pages/employee-repository';
+import EmployeeTeamDashboard from './pages/employee-team-dashboard';
+import EmployeeTeamTodoList from './pages/employee-todo-list';
+import UserJobList from './pages/user-joblist';
+import OrganizationTab from './pages/organization-tab';
+import OrganizationSections from './pages/organization-sections';
+import ApplicationDetail from './pages/application-detail';
+import AcceptCompanyInvite from './pages/accept-company-invite';
+import EmployeeSignup from './pages/employee-signup';
+import EditOrganizationProfile from './pages/organization-profile-edit';
+import EmployeeList from './pages/employee-list';
 
 function App() {
   return (
     <BrowserRouter>
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="organization/employee/list/" element={<EmployeeList  />} />
+      <Route path="employee-signup/" element={<EmployeeSignup  />} />
+      <Route path="join-company/:name/:token/" element={<AcceptCompanyInvite />} />
+      <Route path="organization/job/application/:applicationId/detail/" element={<ApplicationDetail />} />
+      <Route path="organization/dashboard/" element={<OrganizationTab />} />
+      <Route path="organization/sections/" element={<OrganizationSections />} />
       <Route path="interview-questions/:Id/create/" element={<InterviewQuestions />} />
-      <Route path="organization/applicants/" element={<Applicants />} />
+      <Route path="organization/:jobId/applicants/" element={<Applicants />} />
+      <Route path="/user/jobs/list/" element={<UserJobList />} />
+      <Route path="employee/team/:Id/todo/list/" element={<EmployeeTeamTodoList />} />
+      <Route path="organization/employee/repository/" element={<EmployeeRepository />} />
+      <Route path="employee/repository/team/:Id/dashboard/" element={<EmployeeTeamDashboard />} />
+      <Route path="/team/:Id/chats/" element={<TeamChat />} />
       <Route path="/team/:Id/todo/:todoId/edit/" element={<TeamTodoEdit />} />
       <Route path="/team/:Id/todo/create/" element={<TeamTodoCreate />} />
       <Route path="/team/:Id/todo/list/" element={<TeamTodoList />} />
@@ -83,9 +106,10 @@ function App() {
       <Route path="organization/repository/:Id/edit/" element={<EditRepository />} />
       <Route path="organization/repository/create/" element={<CreateRepository />} />
       <Route path="organization/profile/create/" element={<CreateOrganizationProfile  />} />
+      <Route path="organization/profile/edit/" element={<EditOrganizationProfile  />} />
       <Route path="organization/profile/" element={<OrganizationProfile  />} />
       <Route path="organization/jobs/create/" element={<CreateJobs  />} />
-      <Route path="organization/dashboard/" element={<OrganizationDashboard  />} />
+      <Route path="organization/job/list/" element={<OrganizationDashboard  />} />
       <Route path="user/jobs/" element={<UserJobs />} />
       <Route path="organization/signup/" element={<CompanySignup  />} />
       <Route path="jobs" element={<JobsHome />} />

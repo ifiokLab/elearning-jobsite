@@ -113,9 +113,16 @@ const InterviewQuestions = ()=>{
     };
 
     useEffect(() => {
-        //checkCourseOwner();
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false ){
+            navigate('/access-denied/');
+            return;
+        }
         fetchQuestions();
-    }, []);
+    }, [user,navigate]);
     
     
 
@@ -161,7 +168,7 @@ const InterviewQuestions = ()=>{
                             </>
                             ) : (
                             <>
-                                {data.question} {data.id}
+                                {data.question} 
                                 <button className='edit-btn' onClick={() => handleEditingData(data.id,data.question)}><i className="fa-solid fa-pen-to-square"></i></button>
                                 <button className = 'delete-btn' onClick={() => handleDelete(data.id)}><i className="fa-solid fa-trash"></i></button>
                             </>

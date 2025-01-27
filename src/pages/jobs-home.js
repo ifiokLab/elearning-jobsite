@@ -18,6 +18,9 @@ const JobsHome = ()=>{
     const [openModalId, setOpenModalId] = useState(null);
     const [jobs,setJobs] = useState([]);
     const [loading,setLoading] = useState(false);
+    const [savingJobId, setSavingJobId] = useState(null); 
+    const user = useSelector((state) => state.user.user);
+
 
     const handleEllipsisClick = (event,jobId) => {
         event.preventDefault();
@@ -27,6 +30,26 @@ const JobsHome = ()=>{
         setOpenModalId(jobId); // Open the modal for the clicked job
         }
     };
+
+    const saveJob = async (jobId) => {
+        setSavingJobId(jobId); // Set the job being saved
+        try {
+            await axios.post(`${apiUrl}/jobs/${jobId}/save/`, null, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user?.auth_token}`, // Include the user ID in the Authorization header
+                },
+            });
+           
+            setOpenModalId(null);
+        } catch (error) {
+            console.error('Error saving job:', error);
+           // alert('Failed to save job. Please try again.');
+        } finally {
+            setSavingJobId(null); // Reset saving state
+        }
+    };
+
     useEffect(() => {
 
     
@@ -93,14 +116,16 @@ const JobsHome = ()=>{
                         </Link>
                         {openModalId === data.id && (
                             <div className={`elipsis-container`} >
-                                <div className='tabs'>
+                                <div className='tabs'  onClick={() => saveJob(data.id)}>
                                     <i class="fa-solid fa-bookmark"></i>
-                                    <div className='text'>Saved Jobs</div>
+                                    <div className='text'> {savingJobId === data.id ? 'Saving...' : 'Save Job'}</div>
                                 </div>
+                                {/*
                                 <div className='tabs'>
                                     <i class="fa-solid fa-flag"></i>
                                     <div className='text'>Report Job</div>
                                 </div>
+                                */}
                             </div>
                         )}
                     </div>

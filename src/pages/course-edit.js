@@ -7,7 +7,9 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import apiUrl from '../components/api-url';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const CourseEdit = ()=>{
     const [previousThumbnail, setPreviousThumbnail] = useState('');
@@ -26,13 +28,20 @@ const CourseEdit = ()=>{
     const navigate = useNavigate();
     const User = useSelector(state => state.user.user);
     const { id } = useParams();
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "" });
+    
+    
+   
+    const handleSnackbarClose = () => {
+        setSnackbar({ open: false, message: "", severity: "" });
+    };
 
     
     
     const checkCourseOwner = async () => {
         //console.log('user.auth_token:',user);
         try {
-          const response = await axios.get(`http://localhost:8000/api/check-course-owner/${id}/`,{
+          const response = await axios.get(`${apiUrl}/api/check-course-owner/${id}/`,{
               headers: {
                   Authorization: `Token ${User?.auth_token}`,
               },
@@ -61,14 +70,19 @@ const CourseEdit = ()=>{
             formData.append('category', selectedCategory);
             formData.append('sub_category', selectedSubcategory);
             formData.append('overview', overview);
-            formData.append('thumbnail', thumbnail);
-            formData.append('preview_video', previewVideo);
+            if(thumbnail !== ""){
+                formData.append('thumbnail', thumbnail);
+            }
+            if(previewVideo !== ""){
+                formData.append('previewVideo', previewVideo);
+            }
+            //formData.append('preview_video', previewVideo);
             console.log('previewVideo:',previewVideo);
     
             // Check if thumbnail is a file (not a base64 string)
            
     
-            const response = await axios.put(`http://127.0.0.1:8000/courses/${id}/edit/`, formData, {
+            const response = await axios.put(`${apiUrl}/courses/${id}/edit/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${User.auth_token}`, // Include the user ID in the Authorization header
@@ -76,6 +90,11 @@ const CourseEdit = ()=>{
             });
     
             if (response.data.success) {
+                setSnackbar({
+                    open: true,
+                    message: "success!",
+                    severity: "success",
+                });
                 setTimeout(() => {
                     setIsLoading(isLoading);
                     navigate('/instructor/');
@@ -158,7 +177,7 @@ const CourseEdit = ()=>{
           setOverview(response.data.overview);
           setDescription(response.data.description);
           setPreviousThumbnail(response.data.thumbnail);
-          setPreviousVideo(response.data.previewVideo);
+          setPreviousVideo(response.data.preview_video);
           
          
           //setLoading(false);
@@ -265,7 +284,7 @@ const CourseEdit = ()=>{
                     id="thumbnail"
                     name="thumbnail"
                     onChange={handleFileChange}
-                    required
+                   
                     />
                 </div>
                 <div className = 'thumbnail-wrapper' >
@@ -277,7 +296,7 @@ const CourseEdit = ()=>{
                     name="previewVideo"
                     onChange={(e) => setPreviewVideo(e.target.files[0])}
                     
-                    required
+                    
                     />
                 </div>
 
@@ -289,6 +308,22 @@ const CourseEdit = ()=>{
                     </button>
                 </div>
             </form>
+
+
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <MuiAlert
+                elevation={6}
+                variant="filled"
+                onClose={handleSnackbarClose}
+                severity={snackbar.severity}
+                >
+                {snackbar.message}
+                </MuiAlert>
+            </Snackbar>
             </div>
         </div>
     );

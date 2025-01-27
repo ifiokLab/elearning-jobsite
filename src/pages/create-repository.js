@@ -102,11 +102,18 @@ const CreateRepository = ()=>{
     
     useEffect(() => {
 
-    
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false){
+            navigate('/access-denied/');
+            return;
+        }
 
 
       
-    }, []);
+    }, [user,navigate]);
     
     return(
        <div class = 'home-wrapper'>
@@ -120,8 +127,9 @@ const CreateRepository = ()=>{
                <div className='repo-form-wrapper'>
                <form className="form-container" onSubmit={handleSubmit}  >
                     <div className='form-header'>
-                        <span>Create Team</span>
                         <i class="fa-solid fa-chalkboard-user"></i>
+                        <span>Create Team</span>
+                        
                     </div>
                     <div className={`form-group ${name ? 'active' : ''}`}>
                         <input type="text" id="name" value={name} onChange = {(e)=>setName(e.target.value)} required />

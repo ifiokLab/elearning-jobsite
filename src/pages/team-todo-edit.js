@@ -92,6 +92,14 @@ const TeamTodoEdit = ()=>{
     };
     
     useEffect(() => {
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false ){
+            navigate('/access-denied/');
+            return;
+        }
         const fetchTodo = async () => {
             try {
               const response = await axios.get(`${apiUrl}/todos/${todoId}/`);
@@ -126,7 +134,7 @@ const TeamTodoEdit = ()=>{
         fetchTodo();
 
         
-    }, [Id]);
+    }, [Id,user,navigate]);
     
     return(
        <div class = 'home-wrapper'>

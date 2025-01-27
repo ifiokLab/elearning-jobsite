@@ -59,7 +59,7 @@ const CreateAnnouncement = ()=>{
                     setTitle('');
                     setContent('');
                     //setShowSnackbar(!showSnackbar);
-                    navigate('/organization/repository/');
+                    navigate(`/repository/team/${Id}/message-board/`);
                    
                 }, 5000);
                 //setsnackbarStatus('success');
@@ -86,6 +86,14 @@ const CreateAnnouncement = ()=>{
     };
     
     useEffect(() => {
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false){
+            navigate('/access-denied/');
+            return;
+        }
         const fetchTeam = async () => {
             try {
               const response = await axios.get(`${apiUrl}/repository/team/${Id}/detail/`);

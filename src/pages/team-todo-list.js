@@ -21,7 +21,7 @@ import OrganizationSidebar from '../components/organization-sidebar';
 const TeamTodoList = ()=>{
     const [sidebarOpen,setsidebarOpen] = useState(false);
     const [todos, setTodos] = useState([]);
-    const [loading,setLoading] = useState(false);
+    const [loading,setLoading] = useState(true);
     const [openModalIndex, setOpenModalIndex] = useState(null);
     const user = useSelector((state) => state.user.user);
     const { Id } = useParams();
@@ -56,6 +56,7 @@ const TeamTodoList = ()=>{
     
     const fetchTodos = async () => {
         try {
+           
             const response = await axios.get(`${apiUrl}/teams/${Id}/todos/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -97,37 +98,50 @@ const TeamTodoList = ()=>{
                             <Link to ={`/team/${Id}/todo/create/`} className = "create-btn">Post</Link>
                         </div>
                         <div className='apps-container' id='apps-container-message-list' >
-                            {todos.map((data,index)=>(
-                                <div key={data.id} to={`/repository/team/${Id}/${data.id}/message-detail/`} className='cards organization-card' >
-                                    <div className='icon hrms-icon'>
-                                        <span className='initials'>{data.userInitials}</span>
-                                    </div>
-                                    <div className='text-wrapper'>
-                                        <div className='title-header'>{data.title}</div>
-                                        <p>{data.description}</p>
-                                        <div className='employee-count'>
-                                            <i class="fa-solid fa-users"></i>
-                                            <span> Assigned To - {data.assigned_to}</span>
-                                    
-                                        </div>
-                                        
-                                        
-                                    </div>
-                                    <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
-                                            <i className="fa-solid fa-ellipsis-vertical"></i>
-                                        </div>
-                                        {openModalIndex === index && (
-                                            <div className='option-modal'>
-                                            {/* Users should be able to click on edit tab to edit the specific organization */}
-                                            <Link to={`/team/${Id}/todo/${data.id}/edit/`} className='option-card' >Edit</Link>
-                                            <div onClick={(event)=>handleDelete(event,data.id)}  className='option-card' >Delete</div>
-  
-                                        
-                                            </div>
-                                        )}
-                                
-                                </div>
-                            ))}
+                            {loading ? (
+                                 <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                            ):(
+                                <>
+                                    {todos.length > 0 ? (
+                                        <>
+                                            {todos.map((data,index)=>(
+                                                <div key={data.id} to={`/repository/team/${Id}/${data.id}/message-detail/`} className='cards organization-card' >
+                                                    <div className='icon hrms-icon'>
+                                                        <span className='initials'>{data.userInitials}</span>
+                                                    </div>
+                                                    <div className='text-wrapper'>
+                                                        <div className='title-header'>{data.title}</div>
+                                                        <p>{data.description}</p>
+                                                        <div className='employee-count'>
+                                                            <i class="fa-solid fa-users"></i>
+                                                            <span> Assigned To - {data.assigned_to}</span>
+                                                    
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                    <div className='chevron-card' onClick={(event) => handleEllipsisClick(event,index)}>
+                                                            <i className="fa-solid fa-ellipsis-vertical"></i>
+                                                        </div>
+                                                        {openModalIndex === index && (
+                                                            <div className='option-modal'>
+                                                            {/* Users should be able to click on edit tab to edit the specific organization */}
+                                                            <Link to={`/team/${Id}/todo/${data.id}/edit/`} className='option-card' >Edit</Link>
+                                                            <div onClick={(event)=>handleDelete(event,data.id)}  className='option-card' >Delete</div>
+                
+                                                        
+                                                            </div>
+                                                        )}
+                                                
+                                                </div>
+                                            ))}
+                                        </>
+                                    ):(
+                                       <h3>No data found.</h3>
+                                    )}
+                                </>
+                            )}
+                            
                             
                         </div>
                 

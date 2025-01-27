@@ -22,9 +22,14 @@ const Instructor = ()=>{
     useEffect(() => {
 
        
-        if (User=== null || User?.isInstructor === false ) {
+        if (User=== null ) {
             // Redirect to the login page
             navigate('/instructor-login/');
+            return; // Stop further execution of useEffect
+        }
+        if ( User?.isInstructor === false ) {
+            // Redirect to the login page
+            navigate('/access-denied/');
             return; // Stop further execution of useEffect
         }
 

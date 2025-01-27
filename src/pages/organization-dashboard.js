@@ -8,6 +8,8 @@ import Header from '../components/header';
 import { useSelector } from 'react-redux';
 import apiUrl from '../components/api-url';
 import 'swiper/swiper-bundle.css';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import '../styles/organization-dashboard.css';
 import logo from '../styles/logo.svg';
 import hero1 from '../styles/hero1.jpg';
@@ -18,7 +20,8 @@ import OrganizationSidebar from '../components/organization-sidebar';
 const OrganizationDashboard = ()=>{
     const [sidebarOpen,setsidebarOpen] = useState(false);
     const [jobs,setJobs] = useState([]);
-    const [loading,setLoading] = useState(false);
+    const [loading,setLoading] = useState(true);
+    const navigate = useNavigate();
     
     const user = useSelector((state) => state.user.user);
 
@@ -26,12 +29,20 @@ const OrganizationDashboard = ()=>{
         setsidebarOpen(!sidebarOpen);
     };
     useEffect(() => {
-
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false){
+            navigate('/access-denied/');
+            return;
+        }
     
 
 
         const fetchUserJobs = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`${apiUrl}/organization/job-list/`, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -60,7 +71,19 @@ const OrganizationDashboard = ()=>{
             </div>
             <OrganizationHeader toggleSidebar={toggleSidebar} />
             <div className='job-list-wrapper' id='organization-job-list' >
-                {jobs.map((data)=>(
+            <div className='employer-organizations'>
+                            <div class = 'org'>
+                                Jobs
+                            </div>
+                           <Link to ='/organization/jobs/create/' className = "create-btn">create jobs</Link>
+                </div>
+                {loading ? (
+                     <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                ):(
+                    <>
+                        {jobs.length > 0 ? (
+                    <>
+                        {jobs.map((data)=>(
                     <div key={data.id} className = 'job-container'>
                         <div className='link-wrapper'>
                             <div className='title'>
@@ -69,7 +92,7 @@ const OrganizationDashboard = ()=>{
                         
                             <div className='tab-wrapper-x'>
                                 <div className='job-type'>
-                                <Link to='/'>
+                                <Link to={`/organization/${data.id}/applicants/`}>
                                         applicant(0)
                                 </Link>
                                 </div>
@@ -89,6 +112,13 @@ const OrganizationDashboard = ()=>{
                         
                     </div>
                 ))}
+                    </>
+                ):(
+                    <h4>No data found.</h4>
+                )}
+                    </>
+                )}
+                
                 
                
             </div>

@@ -17,12 +17,13 @@ import { useNavigate,useParams } from 'react-router-dom';
 import OrganizationHeader from '../components/organization-header';
 import OrganizationSidebar from '../components/organization-sidebar';
 
-const TeamDashboard = ()=>{
+const EmployeeTeamDashboard = ()=>{
     const [sidebarOpen,setsidebarOpen] = useState(false);
     const [teams,setTeams] = useState([]);
     const [loading,setLoading] = useState(false);
     const user = useSelector((state) => state.user.user);
     const { Id } = useParams();
+    const navigate = useNavigate();
    
 
     const toggleSidebar = ()=>{
@@ -30,7 +31,12 @@ const TeamDashboard = ()=>{
     };
     
     useEffect(() => {
-        console.log('user.is_employee',user.is_employee)
+        if(user === null || user.is_employee === false){
+            //navigate('/login')
+            //return;
+        }
+
+
         const fetchTeam = async () => {
             try {
               const response = await axios.get(`${apiUrl}/repository/team/${Id}/detail/`);
@@ -52,7 +58,7 @@ const TeamDashboard = ()=>{
         fetchTeam();
 
         
-    }, [user]);
+    }, []);
     
     return(
        <div class = 'home-wrapper'>
@@ -72,14 +78,14 @@ const TeamDashboard = ()=>{
                         <div className='apps-container'>
                             <Link to={`/repository/team/${Id}/message-board/`} className='cards organization-card' >
                             <div className='icon hrms-icon'>
-                                <i className='fa-solid fa-message'></i>
+                                <img src= '' alt='team' />
                             </div>
                             <div className='text-wrapper'>
                                 <div className='title-header'>Message dashboard</div>
                                 <p>some desc</p>
                                 <div className='employee-count'>
-                                    { /*<i class="fa-solid fa-users"></i>
-                                    <span>dept</span> */  }
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>dept</span>
                             
                                 </div>
                                 
@@ -89,13 +95,14 @@ const TeamDashboard = ()=>{
                             </Link>
                             <Link to={`/team/${Id}/file/list/`} className='cards organization-card' >
                             <div className='icon hrms-icon'>
-                                <i className='fa-solid fa-file'></i>
+                                <img src= '' alt='team' />
                             </div>
                             <div className='text-wrapper'>
                                 <div className='title-header'>Upload Files</div>
                                 <p>some desc</p>
                                 <div className='employee-count'>
-                                    
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>dept</span>
                             
                                 </div>
                                 
@@ -103,50 +110,33 @@ const TeamDashboard = ()=>{
                             </div>
                             
                             </Link>
-                           {user.is_employee ? (
-                                <Link to={`/employee/team/${Id}/todo/list/`} className='cards organization-card' >
-                                <div className='icon hrms-icon'>
-                                <i className='fa-solid fa-list'></i>
-                                </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>To Dos</div>
-                                    <p>some desc</p>
-                                    <div className='employee-count'>
-                                        
-                                
-                                    </div>
-                                    
-                                    
+                            <Link to={`/team/${Id}/todo/list/`} className='cards organization-card' >
+                            <div className='icon hrms-icon'>
+                                <img src= '' alt='team' />
+                            </div>
+                            <div className='text-wrapper'>
+                                <div className='title-header'>To Dos</div>
+                                <p>some desc</p>
+                                <div className='employee-count'>
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>dept</span>
+                            
                                 </div>
                                 
-                                </Link>
-                           ):(
-                                <Link to={`/team/${Id}/todo/list/`} className='cards organization-card' >
-                                <div className='icon hrms-icon'>
-                                    <i className='fa-solid fa-list'></i>
-                                </div>
-                                <div className='text-wrapper'>
-                                    <div className='title-header'>To Dos</div>
-                                    <p>some desc</p>
-                                    <div className='employee-count'>
-                                      
                                 
-                                    </div>
-                                    
-                                    
-                                </div>
-                                
-                                </Link>
-                           )}
+                            </div>
+                            
+                            </Link>
                             <Link to={`/team/${Id}/chats/`} className='cards organization-card' >
                             <div className='icon hrms-icon'>
-                            <i className='fa-solid fa-comments'></i>
+                                <img src= '' alt='team' />
                             </div>
                             <div className='text-wrapper'>
                                 <div className='title-header'>Chats</div>
                                 <p>some desc</p>
                                 <div className='employee-count'>
-                                    
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>dept</span>
                             
                                 </div>
                                 
@@ -166,4 +156,4 @@ const TeamDashboard = ()=>{
     )
 };
 
-export default TeamDashboard;
+export default EmployeeTeamDashboard;

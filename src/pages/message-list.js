@@ -24,15 +24,24 @@ const MessageList = ()=>{
     const [loading,setLoading] = useState(false);
     const user = useSelector((state) => state.user.user);
     const { Id } = useParams();
-   
+   const navigate = useNavigate();
 
     const toggleSidebar = ()=>{
         setsidebarOpen(!sidebarOpen);
     };
     
     useEffect(() => {
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false || user.is_employee === false){
+            navigate('/access-denied/');
+            return;
+        };
         const fetchAnnouncements = async () => {
             try {
+                setLoading(true);
                 const response = await axios.get(`${apiUrl}/announcements/team/${Id}/list/`, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -89,29 +98,42 @@ const MessageList = ()=>{
                             <Link to ={`/team/${Id}/announcement/create/`} className = "create-btn">Post</Link>
                         </div>
                         <div className='apps-container' id='apps-container-message-list' >
-                            {announcements.map((data)=>(
-                                <Link key={data.id} to={`/repository/team/${Id}/${data.id}/message-detail/`} className='cards organization-card' >
-                                    <div className='icon hrms-icon'>
-                                        <span className='initials'>{data.userInitials}</span>
-                                    </div>
-                                    <div className='text-wrapper'>
-                                        <div className='title-header'>{data.title}</div>
-                                        <ReactQuill
-                                            value={data.content}
-                                            readOnly={true}
-                                            theme={"bubble"}
-                                        />
-                                        <div className='employee-count'>
-                                            <i class="fa-solid fa-users"></i>
-                                            <span>{data.user} - {data.date}</span>
-                                    
-                                        </div>
-                                        
-                                        
-                                    </div>
-                                
-                                </Link>
-                            ))}
+                            {loading ? (
+                                <Skeleton count={5} height={30} style={{ marginBottom: '10px' }} />
+                            ):(
+                                <>
+                                    {announcements.length > 0 ? (
+                                        <>
+                                            {announcements.map((data)=>(
+                                                <Link key={data.id} to={`/repository/team/${Id}/${data.id}/message-detail/`} className='cards organization-card' >
+                                                    <div className='icon hrms-icon'>
+                                                        <span className='initials'>{data.userInitials}</span>
+                                                    </div>
+                                                    <div className='text-wrapper'>
+                                                        <div className='title-header'>{data.title}</div>
+                                                        <ReactQuill
+                                                            value={data.content}
+                                                            readOnly={true}
+                                                            theme={"bubble"}
+                                                        />
+                                                        <div className='employee-count'>
+                                                            <i class="fa-solid fa-users"></i>
+                                                            <span>{data.user} - {data.date}</span>
+                                                    
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                
+                                                </Link>
+                                            ))}
+                                        </>
+                                    ):(
+                                        <h3>No data found.</h3>
+                                    )}
+                                </>
+                            )}
+                            
                             
                         </div>
                 

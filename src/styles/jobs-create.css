@@ -40,6 +40,9 @@
     border: transparent;
     padding: 8px 20px;
     cursor: pointer;
+    display:flex;
+    align-items: center;
+
 }
 .dashboard-container form input, .dashboard-container form select, .dashboard-container form textarea {
     width: 100%;

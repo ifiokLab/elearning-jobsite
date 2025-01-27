@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 import OrganizationHeader from '../components/organization-header';
 import OrganizationSidebar from '../components/organization-sidebar';
 
-const Repository = ()=>{
+const EmployeeRepository = ()=>{
     const [sidebarOpen,setsidebarOpen] = useState(false);
     const [teams,setTeams] = useState([]);
     const [loading,setLoading] = useState(false);
@@ -146,14 +146,10 @@ const Repository = ()=>{
         }
     };
     useEffect(() => {
-        if(user === null){
-            navigate('/login/');
-            return;
-        };
-        if(user.is_company === false && user.is_employee === false){
-            navigate('/access-denied/');
-            return;
-        }
+       if( user === null || user.is_employee === false){
+            //navigate('/login');
+            return ;
+       }
 
         fetchTeams();
     }, [navigate,user]);
@@ -171,7 +167,7 @@ const Repository = ()=>{
                             <div class = 'org'>
                                 Repository
                             </div>
-                           <Link to ='/organization/repository/create/' className = "create-btn">create team</Link>
+                           <Link to ='' ></Link>
                 </div>
                 <>
                     {loading ? (
@@ -256,4 +252,4 @@ const Repository = ()=>{
     )
 };
 
-export default Repository;
+export default EmployeeRepository;

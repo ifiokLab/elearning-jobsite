@@ -10,10 +10,13 @@ import { useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import apiUrl from '../components/api-url';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 
-const CreateOrganizationProfile = ()=>{
+const EditOrganizationProfile = ()=>{
     const [name, setName] = useState('');
+    const [previousLogo, setPreviousLogo] = useState('');
     const [cities, setCities] = useState([]);
     const [countries, setCountries] = useState([]);
     const [employee_count, setEmployeeCount] = useState('');
@@ -26,11 +29,13 @@ const CreateOrganizationProfile = ()=>{
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const User = useSelector(state => state.user.user);
-
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "" });
     
     
    
-   
+    const handleSnackbarClose = () => {
+        setSnackbar({ open: false, message: "", severity: "" });
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
@@ -41,7 +46,10 @@ const CreateOrganizationProfile = ()=>{
             formData.append('country', country);
             formData.append('city', city);
             formData.append('website', website);
-            formData.append('logo', logo);
+            if(logo !=""){
+                formData.append('logo', logo);
+            }
+            //formData.append('logo', logo);
             formData.append('employee_count', employee_count);
             formData.append('phone', phone);
             formData.append('company_industry', company_industry);
@@ -49,7 +57,7 @@ const CreateOrganizationProfile = ()=>{
             // Check if thumbnail is a file (not a base64 string)
            
     
-            const response = await axios.post(`${apiUrl}/organization/profile/create/`, formData, {
+            const response = await axios.put(`${apiUrl}/company/profile/edit/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': `Token ${User.auth_token}`, // Include the user ID in the Authorization header
@@ -57,9 +65,14 @@ const CreateOrganizationProfile = ()=>{
             });
     
             if (response.data.success) {
+                setSnackbar({
+                    open: true,
+                    message: "success!",
+                    severity: "success",
+                });
                 setTimeout(() => {
                     setIsLoading(isLoading);
-                    navigate('/organization/dashboard/');
+                     navigate('/organization/dashboard/');
                    
                 }, 2000);
                 
@@ -70,6 +83,7 @@ const CreateOrganizationProfile = ()=>{
             }
         } catch (error) {
             console.error('An error occurred:', error);
+            setSnackbar({ open: true, message: "error occurred", severity: "error" });
             setTimeout(() => {
                 setIsLoading(isLoading);
                
@@ -103,7 +117,40 @@ const CreateOrganizationProfile = ()=>{
     };
 
    
+    const fetchProfileData = async () => {
+        try {
+          const response = await axios.get(`${apiUrl}/api/fetch-company-profile/`,{
+            headers: {
+                Authorization: `Token ${User?.auth_token}`,
+            },
+          });
+            if (response.data.success) {
+                setCompanyIndustry(response.data.data.company_industry);
+                setName(response.data.data.company_name);
+                setWebsite(response.data.data.website);
+                setPhone(response.data.data.phone);
+                setEmployeeCount(response.data.data.employee_count);
+                setPreviousLogo(response.data.data.logo);
+                
+                //setPreviousPicture Redirect to the home page
+               
+            } else {
+                setTimeout(() => {
+                    navigate('/profile/create/'); // Change '/' to the actual path of your home page
+                }, 2000); // 2000 milliseconds (2 seconds) delay
+            
+            // Handle failed signup, e.g., show error messages to the user
+            }
+          
+        } catch (error) {
+            setTimeout(() => {
+                navigate('/login'); // Change '/' to the actual path of your home page
+            }, 2000); // 2000 milliseconds (2 seconds) delay
+          console.error('Error fetching cart courses:', error);
+        }
+    };
     
+
 
     useEffect(() => {
         // Check if the user is authenticated  !User && User.isInstructor === true 
@@ -112,7 +159,7 @@ const CreateOrganizationProfile = ()=>{
             navigate('/login/');
             return;
         };
-        if(User.is_company === false){
+        if(User.is_company === false ){
             navigate('/access-denied/');
             return;
         }
@@ -157,6 +204,7 @@ const CreateOrganizationProfile = ()=>{
 
         fetchCountry();
         fetchCities();
+        fetchProfileData();
        
         
     }, [User, navigate]);
@@ -251,6 +299,7 @@ const CreateOrganizationProfile = ()=>{
               
                 <div className = 'thumbnail-wrapper' >
                      <label htmlFor="profilePicture" className='thumb-label'> Company Logo</label>
+                     <div>previous:{previousLogo}</div>
                     <input
                     type="file"
                     id="profilePicture"
@@ -269,9 +318,24 @@ const CreateOrganizationProfile = ()=>{
                     </button>
                 </div>
             </form>
+
+            <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+      >
+        <MuiAlert
+          elevation={6}
+          variant="filled"
+          onClose={handleSnackbarClose}
+          severity={snackbar.severity}
+        >
+          {snackbar.message}
+        </MuiAlert>
+      </Snackbar>
             </div>
         </div>
     );
 };
 
-export default  CreateOrganizationProfile;
+export default  EditOrganizationProfile;

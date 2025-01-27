@@ -9,6 +9,10 @@ import '../styles/course-sections.css';
 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import MuiAlert from "@mui/material/Alert";
+import Snackbar from "@mui/material/Snackbar";
+import apiUrl from '../components/api-url';
+
 
 const CourseSections = () => {
   // Get the course ID from the route parameters
@@ -28,7 +32,15 @@ const CourseSections = () => {
   const [editingSectionId, setEditingSectionId] = useState(null);
   const [editingContentId, setEditingContentId] = useState(null);
   const [contentDescription, setContentDescription] = useState('');
+  const [loading,setLoading] = useState(false);
   const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "" });
+    
+    
+   
+  const handleSnackbarClose = () => {
+      setSnackbar({ open: false, message: "", severity: "" });
+  };
 
     const checkCourseOwner = async () => {
       //console.log('user.auth_token:',user);
@@ -69,12 +81,24 @@ const CourseSections = () => {
       }
     };
 
+      if (User=== null ) {
+        // Redirect to the login page
+        navigate('/instructor-login/');
+        return; // Stop further execution of useEffect
+    }
+    if ( User?.isInstructor === false ) {
+        // Redirect to the login page
+        navigate('/access-denied/');
+        return; // Stop further execution of useEffect
+    }
+
     checkCourseOwner();
     fetchSections();
   }, [id])
   // Function to add a new section
   const addSection = async () => {
     try {
+      setLoading(true);
       // Make a POST request to the API endpoint to add a new section
       const response = await axios.post(
         `http://127.0.0.1:8000/courses/${id}/add-section/`,
@@ -92,20 +116,32 @@ const CourseSections = () => {
 
       // Check if the request was successful (status code 201)
       if (response.status === 201) {
+        setLoading(false);
         // Section added successfully, update local state
         setSections([...sections, response.data]);
         setSectionTitle('');
         setSectionDescription('');
+        setSnackbar({
+          open: true,
+          message: "success!",
+          severity: "success",
+      });
       } else {
         console.error('Failed to add section:', response.data);
       }
     } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('An error occurred while adding a section:', error);
     }
   };
 
   const addContentToSection = async (sectionId) => {
     try {
+      setLoading(true);
       const formData = new FormData();
       formData.append('title', newContentTitle);
       formData.append('content_type', newContentType);
@@ -134,7 +170,19 @@ const CourseSections = () => {
       setNewContentType('');
       setNewContentFile(null);
       setContentDescription('');
+      setLoading(false);
+      setSnackbar({
+        open: true,
+        message: "success!",
+        severity: "success",
+    });
     } catch (error) {
+      setLoading(false);
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('Error adding content:', error);
     }
   };
@@ -160,6 +208,7 @@ const CourseSections = () => {
 
   const updateSection = async () => {
     try {
+      setLoading(true);
       const updatedSection = {
         title: newSectionTitle,
         description: newSectionDescription,
@@ -176,9 +225,21 @@ const CourseSections = () => {
   
       // Clear input fields and reset editing state after updating a section
       setNewSectionTitle('');
+      setLoading(false);
       setNewSectionDescription('');
       setEditingSectionId(null);
+      setSnackbar({
+        open: true,
+        message: "success!",
+        severity: "success",
+    });
     } catch (error) {
+      setLoading(false);
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('Error updating section:', error);
     }
   };
@@ -190,7 +251,17 @@ const CourseSections = () => {
       // Update the sections array after deleting a section
       const updatedSections = sections.filter((section) => section.id !== sectionId);
       setSections(updatedSections);
+      setSnackbar({
+        open: true,
+        message: "success!",
+        severity: "success",
+    });
     } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('Error deleting section:', error);
     }
   };
@@ -206,6 +277,7 @@ const CourseSections = () => {
 
   const updateContent = async (sectionId, contentId) => {
     try {
+      setLoading(true);
       const updatedContent = {
         title: newContentTitle,
         content_type: newContentType,
@@ -233,13 +305,26 @@ const CourseSections = () => {
       setNewContentType('');
       setEditingContentId(null);
       setContentDescription('');
+      setLoading(false);
+      setSnackbar({
+        open: true,
+        message: "success!",
+        severity: "success",
+    });
     } catch (error) {
+      setLoading(false);
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('Error updating content:', error);
     }
   };
 
   const deleteContent = async (sectionId, contentId) => {
     try {
+      setLoading(true);
       await axios.delete(`http://localhost:8000/api/sections/${sectionId}/contents/${contentId}/delete/`);
 
       const updatedSections = sections.map((section) => {
@@ -252,7 +337,19 @@ const CourseSections = () => {
         return section;
       });
       setSections(updatedSections);
+      setLoading(false);
+      setSnackbar({
+        open: true,
+        message: "success!",
+        severity: "success",
+    });
     } catch (error) {
+      setLoading(false);
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('Error deleting content:', error);
     }
   };
@@ -313,7 +410,10 @@ const CourseSections = () => {
                       value={newSectionDescription}
                       onChange={(e) => setNewSectionDescription(e.target.value)}
                     />
-                    <button className='add-section-btn' onClick={updateSection}>Update Section</button>
+                    <button className='add-section-btn' onClick={updateSection}>
+                      Update Section
+                      {loading ? <div className="loader"></div> : '' }
+                    </button>
                   </div>
                   
                 </>
@@ -356,7 +456,10 @@ const CourseSections = () => {
                     onChange={(e) => setNewContentFile(e.target.files[0])}
                   />
                   )}
-                  <button className='add-section-btn' onClick={() => addContentToSection(section.id)}>Add Content</button>
+                  <button className='add-section-btn' onClick={() => addContentToSection(section.id)}>
+                    Add Content
+                    {loading ? <div className="loader"></div> : '' }
+                  </button>
                 </div>
               )}
   
@@ -406,6 +509,7 @@ const CourseSections = () => {
                         )}
                         <button className='add-section-btn' onClick={() => updateContent(section.id, content.id)}>
                           Update Content
+                          {loading ? <div className="loader"></div> : '' }
                         </button>
                       </>
                     ) : (
@@ -426,6 +530,20 @@ const CourseSections = () => {
       </div>
     </div>
       </div>
+      <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <MuiAlert
+                elevation={6}
+                variant="filled"
+                onClose={handleSnackbarClose}
+                severity={snackbar.severity}
+                >
+                {snackbar.message}
+                </MuiAlert>
+            </Snackbar>
    </div>
   );
   

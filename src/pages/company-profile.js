@@ -36,9 +36,17 @@ const CompanyProfile = ()=>{
         }   
     };
     useEffect(() => {
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false){
+            navigate('/access-denied/');
+            return;
+        };
 
       fetchProfile();
-    }, []);
+    }, [user,navigate]);
 
     return(
         <div className='page-wrapper'>

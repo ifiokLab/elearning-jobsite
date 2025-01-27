@@ -53,7 +53,7 @@ const AcceptTeamInvite = ()=>{
                     setIsLoading(isLoading);
                    
                     //setShowSnackbar(!showSnackbar);
-                    navigate(`/repository/team/${response.data.teamId}/dashboard`);
+                    navigate(`/employee/repository/team/${response.data.teamId}/dashboard`);
                    
                 }, 5000);
                 //setsnackbarStatus('success');
@@ -81,8 +81,14 @@ const AcceptTeamInvite = ()=>{
     };
     
     useEffect(() => {
-        
-
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_employee === false){
+            navigate('/access-denied/');
+            return;
+        }
         
     }, [token]);
     

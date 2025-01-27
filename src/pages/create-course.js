@@ -8,7 +8,8 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import apiUrl from '../components/api-url';
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const CreateCourse = ()=>{
     const [title, setTitle] = useState('');
@@ -24,7 +25,13 @@ const CreateCourse = ()=>{
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const User = useSelector(state => state.user.user);
-
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "" });
+    
+    
+   
+    const handleSnackbarClose = () => {
+        setSnackbar({ open: false, message: "", severity: "" });
+    };
     
     
    
@@ -56,9 +63,14 @@ const CreateCourse = ()=>{
             });
     
             if (response.data.success) {
+                setSnackbar({
+                    open: true,
+                    message: "success!",
+                    severity: "success",
+                });
                 setTimeout(() => {
                     setIsLoading(isLoading);
-                    navigate('/');
+                    navigate('/instructor/');
                    
                 }, 2000);
                 console.log('Course created successfully:', response.data.course);
@@ -132,11 +144,17 @@ const CreateCourse = ()=>{
     useEffect(() => {
         // Check if the user is authenticated  !User && User.isInstructor === true 
        
-        if (User=== null || User?.isInstructor === false ) {
+        if (User=== null ) {
             // Redirect to the login page
             navigate('/instructor-login/');
             return; // Stop further execution of useEffect
         }
+        if ( User?.isInstructor === false ) {
+            // Redirect to the login page
+            navigate('/access-denied/');
+            return; // Stop further execution of useEffect
+        }
+
     
         // Fetch categories and default subcategories
         const fetchData = async () => {
@@ -245,6 +263,21 @@ const CreateCourse = ()=>{
                     </button>
                 </div>
             </form>
+
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <MuiAlert
+                elevation={6}
+                variant="filled"
+                onClose={handleSnackbarClose}
+                severity={snackbar.severity}
+                >
+                {snackbar.message}
+                </MuiAlert>
+            </Snackbar>
             </div>
         </div>
     );

@@ -30,7 +30,7 @@ const MessageDetail = ()=>{
     const [newReply, setNewReply] = useState({});
     const user = useSelector((state) => state.user.user);
     const { Id,announcementId} = useParams();
-    
+    const navigate = useNavigate();
    
 
     const toggleSidebar = ()=>{
@@ -57,7 +57,8 @@ const MessageDetail = ()=>{
                 'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
             },
         });
-          setComments([...comments, response.data]);
+          //setComments([...comments, response.data]);
+          fetchAnnouncementDetails();
           setNewComment("");
         } catch (error) {
           console.error("Error adding comment:", error);
@@ -77,7 +78,10 @@ const MessageDetail = ()=>{
                 'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
             },
         });
-          setComments((prevComments) =>
+        fetchAnnouncementDetails();
+        setNewReply('');
+        
+          /*setComments((prevComments) =>
             prevComments.map((comment) =>
               comment.id === commentId
                 ? {
@@ -87,7 +91,7 @@ const MessageDetail = ()=>{
                 : comment
             )
           );
-          setNewReply((prev) => ({ ...prev, [commentId]: "" }));
+          setNewReply((prev) => ({ ...prev, [commentId]: "" })); */
         } catch (error) {
           console.error("Error adding reply:", error);
         }
@@ -120,8 +124,14 @@ const MessageDetail = ()=>{
     
     
     useEffect(() => {
-        
-
+      if(user === null){
+          navigate('/login/');
+          return;
+      };
+      if(user.is_company === false || user.is_employee === false){
+          navigate('/access-denied/');
+          return;
+      }
         
         const fetchTeam = async () => {
             try {

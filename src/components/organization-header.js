@@ -43,7 +43,7 @@ const OrganizationHeader = ({ toggleSidebar })=>{
                     </div>
                     <div className='text'>Notification</div>
                </Link>
-               <Link to="" className='card-box'>
+               <Link to="/organization/profile/" className='card-box'>
                     <div className='icon'>
                         <i class="fa-solid fa-user"></i>
                     </div>

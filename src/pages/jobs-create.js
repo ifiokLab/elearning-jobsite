@@ -138,7 +138,7 @@ const CreateJobs = ()=>{
             if(response.data.success){
                 setTimeout(() => {
                     setIsLoading(isLoading);
-                    navigate('/organization/dashboard/');
+                    navigate('/organization/job/list/');
                    
                 }, 2000); 
             }

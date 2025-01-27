@@ -9,7 +9,11 @@
     display: flex;
     align-items: center;
 }
-
+.progress-tab{
+    display: flex;
+    justify-content: flex-end;
+    
+}
 .organization-form{
     position: fixed;
     top: 0;

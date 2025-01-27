@@ -4,6 +4,15 @@
     display: flex;
 }
 
+.job-card{
+    position: relative;
+}
+.job-card .elipsis-card{
+    position: absolute;
+    right: 20px;
+    padding: 10px;
+   
+}
 #organization-job-list{
     position: absolute;
     left: 200px;

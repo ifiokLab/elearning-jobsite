@@ -16,12 +16,15 @@ import JobHeader from '../components/job-header';
 
 const JobApplication = ()=>{
     const [job,setJob] = useState('');
+    const navigate = useNavigate();
+    const [questions,setQuestions] = useState([]);
     const [letter,setLetter] = useState('');
     const [loading,setLoading] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const user = useSelector((state) => state.user.user);
     const [currentStep, setCurrentStep] = useState(1);
     const { Id,title } = useParams();
+    const [answers, setAnswers] = useState({});
     const [resume, setResume] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -41,15 +44,42 @@ const JobApplication = ()=>{
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
-    
-        if (file && file.type === 'application/pdf' || file.type === 'application/msword') {
-            const reader = new FileReader();
-            //reader.readAsDataURL(file);
-            setResume(file);
-        } else {
-            console.error('Invalid file type or no file selected.');
+        
+       
+        setResume(file);
+        
+    };
+
+     const handleAnswerChange = (questionId, value) => {
+        setAnswers({ ...answers, [questionId]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+
+        const formData = new FormData();
+        formData.append('resume', resume);
+        formData.append('cover_letter', letter);
+        formData.append('answers', JSON.stringify(answers));
+
+        try {
+            await axios.post(`${apiUrl}/jobs/${Id}/apply/`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Token ${user?.auth_token}`, // Replace `user.token` with your actual auth method
+                },
+            });
+            //alert('Application submitted successfully!');
+            navigate('/jobs/');
+        } catch (error) {
+            console.error('Error submitting application:', error);
+            alert('Failed to submit application. Please try again.');
+        } finally {
+            setIsLoading(false);
         }
     };
+
 
     const prevStep = () => {
         setCurrentStep(currentStep - 1);
@@ -84,27 +114,24 @@ const JobApplication = ()=>{
             case 2:
                 return (
                     <>
-                        <h2>Answer these questions from the employer</h2>
-                        <div className = "input-tab-box">
-                            <div className='div-label'>Cover Letter*</div>
-                            <textarea
-                                name="letter"
-                                placeholder="Cover Letter"
-                                value={letter}
-                                onChange={(e)=>setLetter(e.target.value)}
-                            />
-                        
-                        </div>
-                        <div className='input-tab-box'>
-                            <div  className='div-label'>Resume*</div>
-                            <input
-                                type="file"
-                                id="thumbnail"
-                                name="thumbnail"
-                                onChange={handleFileChange}
-                                required
-                            />
-                        </div>
+                        <h2>Employer Questions</h2>
+                        {questions.length > 0 ? (
+                            questions.map((q) => (
+                                <div key={q.id} className="input-tab-box">
+                                {q.question}:
+                                    <label>{q.question}</label>
+                                    <textarea
+                                        name={`answer_${q.id}`}
+                                        placeholder="Your answer"
+                                        value={answers[q.id] || ''}
+                                        onChange={(e) => handleAnswerChange(q.id, e.target.value)}
+                                    />
+                                </div>
+                            ))
+                        ) : (
+                            <p>No questions provided by the employer.</p>
+                        )}
+                       
                      </>
                 );
           
@@ -141,8 +168,26 @@ const JobApplication = ()=>{
                 setJob([]);
             }
         };
+        const fetchJobQuestions = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/jobs/${Id}/questions/`, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                         // Include the user ID in the Authorization header
+                    },
+                });
+                //console.log(response.data.all_courses)
+                setQuestions(response.data);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching user courses:', error);
+                setLoading(false);
+                setQuestions([]);
+            }
+        };
 
         fetchJob();
+        fetchJobQuestions();
     }, []);
 
     return(
@@ -153,7 +198,7 @@ const JobApplication = ()=>{
                 <div className='box-1'>
                     <div className='form-wrapper'>
                     
-                        <form onSubmit=''>
+                        <form onSubmit={handleSubmit}>
                             <h2>Application</h2>
                             {renderProgressBar()}
                             {renderStep()}

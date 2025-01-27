@@ -92,6 +92,14 @@ const TeamTodoCreate = ()=>{
     };
     
     useEffect(() => {
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false ){
+            navigate('/access-denied/');
+            return;
+        }
         const fetchTeam = async () => {
             try {
               const response = await axios.get(`${apiUrl}/api/teams/${Id}/employees/`);

@@ -36,11 +36,11 @@ const CourseViewPage = ()=>{
             if(response.data.enrolled){
                 console.log('errolled');
              }else{
-                navigate('/access-denied/');
+                //navigate('/access-denied/');
             };
         
         } catch (error) {
-            navigate('/access-denied/');
+            //navigate('/access-denied/');
             console.error('Error checking enrollment:', error);
         }   
     };

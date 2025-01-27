@@ -1,11 +1,11 @@
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useParams,useSearchParams } from 'react-router-dom';
 import React, { useState} from 'react';
 import axios from 'axios';
 import Header from '../components/header';
 import 'swiper/swiper-bundle.css';
 import '../styles/signup.css';
-import { Link } from 'react-router-dom';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setLoading } from '../actions/user-action'; // Import setUser and setLoading actions
 import apiUrl from '../components/api-url';
@@ -13,7 +13,7 @@ import apiUrl from '../components/api-url';
 
 
 
-const Signup = ()=>{
+const EmployeeSignup = ()=>{
     const dispatch = useDispatch();
     const loading = useSelector((state) => state.loading);
     const [isLoading, setIsLoading] = useState(false);
@@ -25,6 +25,8 @@ const Signup = ()=>{
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [searchParams] = useSearchParams();
+    const token = searchParams.get("token"); // Get the invite token from the URL
 
     const navigate = useNavigate();
 
@@ -51,12 +53,12 @@ const Signup = ()=>{
         try {
             dispatch(setLoading(true));
            
-            const response = await axios.post(`${apiUrl}/signup/`, {
-            first_name: fname,
-            last_name: lname,
-            email,
-            password,
-            ConfirmPassword,
+            const response = await axios.post(`${apiUrl}/employee-company-signup/${token}/`, {
+                first_name: fname,
+                last_name: lname,
+                email,
+                password,
+                ConfirmPassword,
             });
 
             if (response.data.success) {
@@ -64,7 +66,7 @@ const Signup = ()=>{
 
                 // Redirect to the home page
                 setTimeout(() => {
-                    navigate('/'); // Change '/' to the actual path of your home page
+                    navigate(`/`); // Change '/' to the actual path of your home page
                 }, 2000); // 2000 milliseconds (2 seconds) delay
             } else {
                 console.error('Signup failed:',response.data.errors);
@@ -149,12 +151,10 @@ const Signup = ()=>{
                             
                         </button>
                     </div>
-                    <Link to='/instructor-signup/' className='link-wrapper'>Instructor signup</Link><br />
-                    <Link to='/organization/signup/' className='link-wrapper'>organization signup</Link>
                 </form>
             </div>
         </div>
     );
 };
 
-export default Signup;
+export default EmployeeSignup;

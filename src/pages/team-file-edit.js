@@ -97,6 +97,14 @@ const TeamFileEdit = ()=>{
     };
     
     useEffect(() => {
+        if(user === null){
+            navigate('/login/');
+            return;
+        };
+        if(user.is_company === false || user.is_employee === false){
+            navigate('/access-denied/');
+            return;
+        };
         const fetchFile = async () => {
             try {
               const response = await axios.get(`${apiUrl}/team/file/${fileId}/detail/`);

@@ -8,7 +8,9 @@ import '../styles/course-requirements.css';
 
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import apiUrl from '../components/api-url';
 
 const Requirements = () => {
   const { id } = useParams();
@@ -18,12 +20,18 @@ const Requirements = () => {
   const [requirements, setRequirements] = useState([]);
   const [editingRequirement, setEditingRequirement] = useState(null);
   const navigate = useNavigate();
-
+  const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "" });
+    
+    
+   
+  const handleSnackbarClose = () => {
+      setSnackbar({ open: false, message: "", severity: "" });
+  };
 
   const checkCourseOwner = async () => {
     //console.log('user.auth_token:',user);
     try {
-      const response = await axios.get(`http://localhost:8000/api/check-course-owner/${id}/`,{
+      const response = await axios.get(`${apiUrl}/api/check-course-owner/${id}/`,{
           headers: {
               Authorization: `Token ${user?.auth_token}`,
           },
@@ -42,7 +50,7 @@ const Requirements = () => {
 
   const fetchRequirements = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/courses/${id}/add-requirements/`);
+      const response = await axios.get(`${apiUrl}/courses/${id}/add-requirements/`);
       setRequirements(response.data);
     } catch (error) {
       console.error('Error fetching requirements:', error);
@@ -55,7 +63,7 @@ const Requirements = () => {
       const formData = new FormData();
       formData.append('title', title);
 
-      const response = await axios.post(`http://127.0.0.1:8000/courses/${id}/add-requirements/`, formData, {
+      const response = await axios.post(`${apiUrl}/courses/${id}/add-requirements/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Token ${user.auth_token}`,
@@ -66,10 +74,20 @@ const Requirements = () => {
         console.log('Requirement created successfully:', response.data);
         setTitle('');
         fetchRequirements();
+        setSnackbar({
+          open: true,
+          message: "success!",
+          severity: "success",
+      });
       } else {
         console.error('Failed to create requirement:', response.data.message);
       }
     } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('An error occurred during requirement creation:', error);
     }
   };
@@ -83,12 +101,22 @@ const Requirements = () => {
       });
       console.log('response.data:',response.data);
       if (response.data.success) {
+        setSnackbar({
+          open: true,
+          message: "success!",
+          severity: "success",
+      });
         console.log(`Requirement with ID ${requirementId} deleted successfully.`);
         fetchRequirements();
       } else {
         console.error('Failed to delete requirement:', response.data.message);
       }
     } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('An error occurred during requirement deletion:', error);
     }
   };
@@ -111,6 +139,11 @@ const Requirements = () => {
       });
 
       if (response.data.success) {
+        setSnackbar({
+          open: true,
+          message: "success!",
+          severity: "success",
+      });
         console.log(`Requirement with ID ${requirementId} edited successfully.`);
         fetchRequirements();
         setEditingRequirement(null); // Reset editing state after successful edit
@@ -118,11 +151,26 @@ const Requirements = () => {
         console.error('Failed to edit requirement:', response.data.message);
       }
     } catch (error) {
+      setSnackbar({
+        open: true,
+        message: "an error occurred",
+        severity: "error",
+    });
       console.error('An error occurred during requirement editing:', error);
     }
   };
 
   useEffect(() => {
+    if (user=== null ) {
+      // Redirect to the login page
+      navigate('/instructor-login/');
+      return; // Stop further execution of useEffect
+  }
+  if ( user?.isInstructor === false ) {
+      // Redirect to the login page
+      navigate('/access-denied/');
+      return; // Stop further execution of useEffect
+  }
     checkCourseOwner();
     fetchRequirements();
   }, []);
@@ -172,6 +220,20 @@ const Requirements = () => {
           </ul>
         </div>
       </div>
+      <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <MuiAlert
+                elevation={6}
+                variant="filled"
+                onClose={handleSnackbarClose}
+                severity={snackbar.severity}
+                >
+                {snackbar.message}
+                </MuiAlert>
+            </Snackbar>
     </div>
   );
 };

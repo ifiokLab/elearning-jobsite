@@ -19,27 +19,19 @@ import { useNavigate,useParams } from 'react-router-dom';
 import OrganizationHeader from '../components/organization-header';
 import OrganizationSidebar from '../components/organization-sidebar';
 
-const TeamFileUpload = ()=>{
+const AcceptCompanyInvite = ()=>{
     const [sidebarOpen,setsidebarOpen] = useState(false);
-    const [files, setFiles] = useState([]);
-    const [file, setFile] = useState(null);
-    const [description, setDescription] = useState("");
+   
     const [isLoading,setIsLoading] = useState(false);
     const user = useSelector((state) => state.user.user);
-    const { Id } = useParams();
+    const { name,token } = useParams();
     const navigate = useNavigate();
    
 
     const toggleSidebar = ()=>{
         setsidebarOpen(!sidebarOpen);
     };
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-    
-        const reader = new FileReader();
-        //reader.readAsDataURL(file);
-        setFile(file);
-    };
+   
     const handleSubmit = async (event) => {
         event.preventDefault();
         setIsLoading(!isLoading);
@@ -47,34 +39,30 @@ const TeamFileUpload = ()=>{
         
         try {
             const formData = new FormData();
-            formData.append('file', file);
-            formData.append('description', description);
-            formData.append('team', Id);
-
            
     
-            const response = await axios.post(`${apiUrl}/teams/files/upload/`, formData, {
+            const response = await axios.post(`${apiUrl}/company-invites/accept/${token}/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
+                    //'Authorization': `Token ${user.auth_token}`, // Include the user ID in the Authorization header
                 },
             });
     
             if (response.data.success) {
                 setTimeout(() => {
                     setIsLoading(isLoading);
-                    setFile(null);
-                    setDescription('');
+                   
                     //setShowSnackbar(!showSnackbar);
-                    navigate(`/team/${Id}/file/list/`);
+                    navigate(`/`);
                    
                 }, 5000);
                 //setsnackbarStatus('success');
                 //setShowSnackbar(true);
                
-                console.log('org created successfully:', response.data.course);
+                //console.log('org created successfully:', response.data.course);
                 // Redirect to the home page or do any other actions
             } else {
+                window.location.href = `/employee-signup?token=${token}`;
                 //setsnackbarStatus('fail');
                 //setShowSnackbar(true);
                 //setErrorMessage('response.data.message');
@@ -93,28 +81,16 @@ const TeamFileUpload = ()=>{
     };
     
     useEffect(() => {
-        const fetchTeam = async () => {
-            try {
-              const response = await axios.get(`${apiUrl}/repository/team/${Id}/detail/`);
-              //setCourse(response.data);
-              console.log('response.data:',response.data);
-              //setName(response.data.team_data.name);
-              //setOverview(response.data.team_data.overview);
-              //setPreviousThumbnail(response.data.team_data.logo);
-              
-             
-              //setLoading(false);
-            } catch (error) {
-              console.error('Error fetching course details:', error);
-              //setLoading(false);
-            }
-        };
-
-
-        fetchTeam();
-
+    if(user === null){
+        navigate('/login/');
+        return;
+    };
+    if(user.is_employee == false){
+        navigate('/access-denied/');
+        return;
+    }
         
-    }, [Id]);
+    }, [token]);
     
     return(
        <div class = 'home-wrapper'>
@@ -126,37 +102,8 @@ const TeamFileUpload = ()=>{
             <OrganizationHeader toggleSidebar={toggleSidebar} />
             <div className='job-list-wrapper' id='organization-job-list' >
                <div className='repo-form-wrapper'>
-                
-               <form className="form-container" onSubmit={handleSubmit}  >
-                    <div className='form-header'>
-                        
-                        <i class="fa-solid fa-chalkboard-user"></i>
-                        <span>upload File</span>
-                    </div>
-                    <div className={`form-group ${description ? 'active' : ''}`}>
-                        <input type="text" id="description " value={description } onChange = {(e)=>setDescription(e.target.value)} required />
-                        <label htmlFor="description ">Title</label>
-                    </div>
-                    <div className = 'thumbnail-wrapper' >
-                        <label htmlFor="thumbnail" className='thumb-label'>file</label>
-                        <input
-                        type="file"
-                        id="thumbnail"
-                        name="thumbnail"
-                        onChange={handleFileChange}
-                        required
-                        />
-                    </div>
-                    
-
-                    <div className='btn-wrapper'>
-                        <button type="submit">
-                            Submit
-                            {isLoading ? <div className="loader"></div> : '' }
-                                
-                        </button>
-                    </div>
-                </form>
+                <h3>Hello, you've been invited to join our Company:<strong>${name}</strong></h3>
+                <button onClick={handleSubmit} className='create-btn'>Accept</button>
                </div>
             </div>
            
@@ -167,4 +114,4 @@ const TeamFileUpload = ()=>{
     )
 };
 
-export default TeamFileUpload;
+export default AcceptCompanyInvite;
