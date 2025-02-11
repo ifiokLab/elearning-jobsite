@@ -45,7 +45,7 @@ const CourseSections = () => {
     const checkCourseOwner = async () => {
       //console.log('user.auth_token:',user);
       try {
-        const response = await axios.get(`http://localhost:8000/api/check-course-owner/${id}/`,{
+        const response = await axios.get(`${apiUrl}/api/check-course-owner/${id}/`,{
             headers: {
                 Authorization: `Token ${User?.auth_token}`,
             },
@@ -67,7 +67,7 @@ const CourseSections = () => {
 
     const fetchSections = async () => {
       try {
-        const response = await axios.get(`http://127.0.0.1:8000/courses/${id}/sections/`);
+        const response = await axios.get(`${apiUrl}/courses/${id}/sections/`);
         
         // Assuming your API response structure includes a 'contents' field in each section
         const sectionsWithContents = response.data.map(section => ({
@@ -101,7 +101,7 @@ const CourseSections = () => {
       setLoading(true);
       // Make a POST request to the API endpoint to add a new section
       const response = await axios.post(
-        `http://127.0.0.1:8000/courses/${id}/add-section/`,
+        `${apiUrl}/courses/${id}/add-section/`,
         {
           title: sectionsTitle,
           description: sectionDescription,
@@ -152,7 +152,7 @@ const CourseSections = () => {
         formData.append('content_file', newContentFile);
       }
   
-      const response = await axios.post(`http://localhost:8000/sections/${sectionId}/contents/`, formData);
+      const response = await axios.post(`${apiUrl}/sections/${sectionId}/contents/`, formData);
   
       // Update the sections array with the new content and section contents
       const updatedSections = sections.map((section) => {
@@ -215,7 +215,7 @@ const CourseSections = () => {
       };
   
       // Make a PUT request to the update view with the updated section data
-      await axios.put(`http://localhost:8000/api/sections/${editingSectionId}/update/`, updatedSection);
+      await axios.put(`${apiUrl}/api/sections/${editingSectionId}/update/`, updatedSection);
   
       // Update the sections array after updating a section
       const updatedSections = sections.map((section) =>
@@ -246,7 +246,7 @@ const CourseSections = () => {
   const deleteSection = async (sectionId) => {
     try {
       // Make a DELETE request to the delete view
-      await axios.delete(`http://localhost:8000/api/sections/${sectionId}/delete/`);
+      await axios.delete(`${apiUrl}/api/sections/${sectionId}/delete/`);
   
       // Update the sections array after deleting a section
       const updatedSections = sections.filter((section) => section.id !== sectionId);
@@ -286,7 +286,7 @@ const CourseSections = () => {
         updatedContent.content = contentDescription;
       }
 
-      await axios.put(`http://localhost:8000/api/sections/${sectionId}/contents/${contentId}/update/`, updatedContent);
+      await axios.put(`${apiUrl}/api/sections/${sectionId}/contents/${contentId}/update/`, updatedContent);
 
       const updatedSections = sections.map((section) => {
         if (section.id === sectionId) {
@@ -325,7 +325,7 @@ const CourseSections = () => {
   const deleteContent = async (sectionId, contentId) => {
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:8000/api/sections/${sectionId}/contents/${contentId}/delete/`);
+      await axios.delete(`${apiUrl}/api/sections/${sectionId}/contents/${contentId}/delete/`);
 
       const updatedSections = sections.map((section) => {
         if (section.id === sectionId) {

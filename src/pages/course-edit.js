@@ -156,7 +156,7 @@ const CourseEdit = ()=>{
     const handleCategoryChange = async (categoryId) => {
         setSelectedCategory(categoryId);
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/api/subcategories/${categoryId}/`);
+            const response = await axios.get(`${apiUrl}/api/subcategories/${categoryId}/`);
             setSubcategories(response.data);
             if (response.data.length > 0) {
                 setSelectedSubcategory(response.data[0].id);
@@ -199,14 +199,14 @@ const CourseEdit = ()=>{
         // Fetch categories and default subcategories
         const fetchData = async () => {
             try {
-                const categoriesResponse = await axios.get('http://127.0.0.1:8000/api/categories/');
+                const categoriesResponse = await axios.get('${apiUrl}/api/categories/');
                 setCategories(categoriesResponse.data);
     
                 if (categoriesResponse.data.length > 0) {
                     const defaultCategoryId = categoriesResponse.data[0].id;
                     setSelectedCategory(defaultCategoryId);
     
-                    const subcategoriesResponse = await axios.get(`http://127.0.0.1:8000/api/subcategories/${defaultCategoryId}/`);
+                    const subcategoriesResponse = await axios.get(`${apiUrl}/api/subcategories/${defaultCategoryId}/`);
                     setSubcategories(subcategoriesResponse.data);
     
                     if (subcategoriesResponse.data.length > 0) {

@@ -63,6 +63,7 @@ const UserJobList = ()=>{
             console.log('response.data.saved_jobs:',response.data.saved_jobs);
             setSavedJobs(response.data.saved_jobs);
             setAppliedJobs(response.data.applied_jobs);
+            setInterviews(response.data.interviews)
             //setInterviews(interviewResponse.data);
         } catch (error) {
             console.error('Error fetching jobs or interviews:', error);

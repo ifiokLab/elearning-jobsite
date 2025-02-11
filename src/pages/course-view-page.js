@@ -28,7 +28,7 @@ const CourseViewPage = ()=>{
  
     const checkEnrollment = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/check-enrollment/${id}/`,{
+            const response = await axios.get(`${apiUrl}/api/check-enrollment/${id}/`,{
                 headers: {
                     Authorization: `Token ${user?.auth_token}`,
                 },
@@ -46,7 +46,7 @@ const CourseViewPage = ()=>{
     };
     const fetchCourseDetail = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/courses/${id}/`);
+          const response = await axios.get(`${apiUrl}/courses/${id}/`);
           setCourse(response.data);
           setLoading(false);
         } catch (error) {
@@ -63,7 +63,7 @@ const CourseViewPage = ()=>{
     const fetchCourseSections = async () => {
         if(sections.length<=0){
             try {
-                const response = await axios.get(`http://localhost:8000/api/sections/${id}/`);
+                const response = await axios.get(`${apiUrl}/api/sections/${id}/`);
                
                 setSections(response.data);
                
@@ -84,7 +84,7 @@ const CourseViewPage = ()=>{
     const handleCardClick = async (contentId) => {
         try {
           // Fetch the specific content based on contentId
-          const response = await axios.get(`http://localhost:8000/api/contents/${contentId}/`);
+          const response = await axios.get(`${apiUrl}/api/contents/${contentId}/`);
           setSelectedContent(response.data);
         } catch (error) {
           console.error('Error fetching content details:', error);

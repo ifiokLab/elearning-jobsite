@@ -13,6 +13,8 @@ import logo from '../styles/logo.svg';
 import hero1 from '../styles/hero1.jpg';
 import { useNavigate } from 'react-router-dom';
 import JobHeader from '../components/job-header';
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const JobApplication = ()=>{
     const [job,setJob] = useState('');
@@ -27,7 +29,11 @@ const JobApplication = ()=>{
     const [answers, setAnswers] = useState({});
     const [resume, setResume] = useState('');
     const [isExpanded, setIsExpanded] = useState(false);
-
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "" });
+    
+    const handleSnackbarClose = () => {
+        setSnackbar({ open: false, message: "", severity: "" });
+    };
     const nextStep = () => {
         setCurrentStep(currentStep + 1);
     };
@@ -71,7 +77,17 @@ const JobApplication = ()=>{
                 },
             });
             //alert('Application submitted successfully!');
-            navigate('/jobs/');
+            setSnackbar({
+                open: true,
+                message: "success!",
+                severity: "success",
+            });
+            setTimeout(() => {
+                setIsLoading(isLoading);
+                navigate('/jobs/');
+               
+            }, 2000);
+           
         } catch (error) {
             console.error('Error submitting application:', error);
             alert('Failed to submit application. Please try again.');
@@ -228,7 +244,20 @@ const JobApplication = ()=>{
            </div>
            
         </div>
-        
+        <Snackbar
+                open={snackbar.open}
+                autoHideDuration={6000}
+                onClose={handleSnackbarClose}
+            >
+                <MuiAlert
+                elevation={6}
+                variant="filled"
+                onClose={handleSnackbarClose}
+                severity={snackbar.severity}
+                >
+                {snackbar.message}
+                </MuiAlert>
+            </Snackbar>
        </div>
     )
 };

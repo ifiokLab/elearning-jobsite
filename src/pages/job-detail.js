@@ -67,7 +67,11 @@ const Jobdetail = ()=>{
                      <span>{job.job_type}</span>
                 </div>
                 <div className='apply-wrapper'>
+                   {job.applied ? (
+                     <Link disable to="#" className='apply'>Already applied</Link>
+                   ):(
                     <Link to={`/job/application/${Id}/${title}/`} className='apply'>Apply now</Link>
+                   )}
                     <div className='saved'>
                         <i class="fa-solid fa-bookmark"></i>
                     </div>

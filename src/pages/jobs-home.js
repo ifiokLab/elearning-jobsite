@@ -18,7 +18,9 @@ const JobsHome = ()=>{
     const [openModalId, setOpenModalId] = useState(null);
     const [jobs,setJobs] = useState([]);
     const [loading,setLoading] = useState(false);
-    const [savingJobId, setSavingJobId] = useState(null); 
+    const [savingJobId, setSavingJobId] = useState(null);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [locationQuery, setLocationQuery] = useState(""); 
     const user = useSelector((state) => state.user.user);
 
 
@@ -49,31 +51,41 @@ const JobsHome = ()=>{
             setSavingJobId(null); // Reset saving state
         }
     };
+    const fetchJobs = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(`${apiUrl}/job/list/`, {
+            params: {
+              search: searchQuery,
+              location: locationQuery,
+            },
+          });
+          setJobs(response.data.all_jobs);
+        } catch (error) {
+          console.error("Error fetching jobs:", error);
+          setJobs([]);
+        } finally {
+          setLoading(false);
+        }
+      };
+    const handleSearch = () => {
+    fetchJobs();
+    };
 
+    // Handle Enter Key Press
+    const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+        fetchJobs();
+    }
+    };
     useEffect(() => {
 
     
 
 
-        const fetchUserJobs = async () => {
-            try {
-                const response = await axios.get(`${apiUrl}/job/list/`, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                         // Include the user ID in the Authorization header
-                    },
-                });
-                //console.log(response.data.all_courses)
-                setJobs(response.data.all_jobs);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching user courses:', error);
-                setLoading(false);
-                setJobs([]);
-            }
-            };
+        
 
-        fetchUserJobs();
+        fetchJobs();
     }, []);
     
     return(
@@ -84,11 +96,23 @@ const JobsHome = ()=>{
                 <div className='job-wrapper'>
                     <div className='box-wrapper-a'>
                         <i className="fa-solid fa-magnifying-glass"></i>
-                        <input placeholder='Job title, Keywords' />
+                        
+                        <input
+                            placeholder="Job title, Keywords"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                        />
                     </div>
                     <div className='box-wrapper-b'>
                         <i class="fa-solid fa-location-dot"></i>
-                        <input placeholder='Country,city state, or remote' />
+                        
+                        <input
+                            placeholder="Country, city, state, or remote"
+                            value={locationQuery}
+                            onChange={(e) => setLocationQuery(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                        />
                     </div>
                     <div className='box-wrapper-c'>
                         <button className='find-btn'>Find Jobs</button>

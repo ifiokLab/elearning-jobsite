@@ -94,7 +94,7 @@ const Requirements = () => {
 
   const handleDelete = async (requirementId) => {
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/courses/${id}/requirements/${requirementId}/delete/`, {
+      const response = await axios.delete(`${apiUrl}/courses/${id}/requirements/${requirementId}/delete/`, {
         headers: {
           Authorization: `Token ${user.auth_token}`,
         },
@@ -131,7 +131,7 @@ const Requirements = () => {
       const formData = new FormData();
       formData.append('title', newTitle);
 
-      const response = await axios.put(`http://127.0.0.1:8000/courses/${id}/requirements/${requirementId}/edit/`, formData, {
+      const response = await axios.put(`${apiUrl}/courses/${id}/requirements/${requirementId}/edit/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Token ${user.auth_token}`,
